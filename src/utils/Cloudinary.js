@@ -29,7 +29,7 @@ import fs from "fs";
     }
  }
 
- export const deleteFromCloudinary = async (publicId)=>{
+ export const deleteImageFromCloudinary = async (publicId)=>{
     try {
         if (!publicId) return null;
         // Upload to Cloudinary
@@ -45,4 +45,5 @@ import fs from "fs";
         return null;
     }
  }
+
  export default uploadOnCloudinary;
