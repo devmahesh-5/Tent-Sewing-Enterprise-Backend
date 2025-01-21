@@ -20,5 +20,5 @@ router.post('/logout', verifyJWT, logoutUser);
 router.get('/myprofile', verifyJWT, getCurrentUser);
 router.delete('/delete', verifyJWT, deleteUser);
 router.post('/refresh-token', refreshAccessToken);
-router.post('/update-password', verifyJWT, updatePassword);
+router.patch('/update-password', verifyJWT, updatePassword);
 export default router;
