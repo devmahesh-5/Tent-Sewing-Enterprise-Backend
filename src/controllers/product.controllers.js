@@ -6,25 +6,26 @@ import {asyncHandler} from "../utils/asyncHandler.js";
 import uploadOnCloudinary, {deleteImageFromCloudinary} from "../utils/Cloudinary.js";
 
 const createProduct = asyncHandler(async (req, res) => {
-    const { title, description, price, category } = req.body;
-    if ([title, description, price, category].some((field) => {
+    const { title, description, price, category,status } = req.body;
+    if ([title, description, price, category,status].some((field) => {
         field.trim() == ""
     })) {
         throw new ApiError(400, "All fields are required")
     }
     
     const productLocalFilePath = req.file.path;
-
+  
     if(!productLocalFilePath){
         throw new ApiError(400, "Product image is required");
     }
 
-    const productCloudinaryPath = uploadOnCloudinary(productLocalFilePath);
+    const productCloudinaryPath = await uploadOnCloudinary(productLocalFilePath);
 
     if(!productCloudinaryPath){
         throw new ApiError(500, "Product image upload failed");
     }
 
+    
 
     const product = await Product.create(
         {
@@ -33,7 +34,8 @@ const createProduct = asyncHandler(async (req, res) => {
             price,
             category,
             owner: req.user?._id,
-            image: productCloudinaryPath.url
+            image: productCloudinaryPath.url,
+            status
         }
     )
 
@@ -68,11 +70,14 @@ const updateProduct = asyncHandler(async (req, res) => {
     const productId = req.params.productId;
     const { title, description, price, category } = req.body;
     const productLocalFilePath = req.file.path;
+   // console.log(productLocalFilePath, title, description, price, category);
+    
     if ([title, description, price, category, productLocalFilePath].some((field) => {
-        field.trim() == ""
+        field && field?.trim() == ""
     })) {
         throw new ApiError(400, "All fields are required")
     }
+    
 
     if(!isValidObjectId(productId)){
         throw new ApiError(400, "Invalid product id");
@@ -177,7 +182,9 @@ const getProductById = asyncHandler(async (req, res) => {
 const getProductsByCategory = asyncHandler(async (req, res) => {
     const category = req.params.category;
     const product = await Product.find({category});
-    if(!product){
+    console.log(product, category);
+    
+    if(!product || product.length === 0){
         throw new ApiError(400, "Product does not exist");
     }
     res

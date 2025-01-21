@@ -20,9 +20,9 @@ router.route("/create")
     upload.single("image"),
     createProduct
 );
-router.route("/all").get(getAllProducts);
+router.route("/all-products").get(getAllProducts);
 router.route("/:productId").
-    post(
+    patch(
         upload.single("image"),
         updateProduct)
     .delete(deleteProduct)
