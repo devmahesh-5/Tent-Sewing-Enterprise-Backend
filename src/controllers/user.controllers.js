@@ -216,4 +216,5 @@ const updatePassword = asyncHandler(async (req,res)=>{
         new Apiresponse(200,{user},"Password updated successfully")
     )
 })
+
 export { registerUser, loginUser, logoutUser, getCurrentUser, deleteUser, refreshAccessToken, updatePassword };
