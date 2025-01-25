@@ -7,14 +7,17 @@ import uploadOnCloudinary, {deleteImageFromCloudinary} from "../utils/Cloudinary
 
 const createProduct = asyncHandler(async (req, res) => {
     const { title, description, price, category,status } = req.body;
+    
     if ([title, description, price, category,status].some((field) => {
         field.trim() == ""
     })) {
         throw new ApiError(400, "All fields are required")
     }
+   
     
     const productLocalFilePath = req.file.path;
-  
+    // console.log(productLocalFilePath);
+    
     if(!productLocalFilePath){
         throw new ApiError(400, "Product image is required");
     }
@@ -68,11 +71,11 @@ const getAllProducts = asyncHandler(async (req, res) => {
 
 const updateProduct = asyncHandler(async (req, res) => {
     const productId = req.params.productId;
-    const { title, description, price, category } = req.body;
-    const productLocalFilePath = req.file.path;
+    const { title, description, price, category, status } = req.body;
+    const productLocalFilePath = req.file?.path;
    // console.log(productLocalFilePath, title, description, price, category);
     
-    if ([title, description, price, category, productLocalFilePath].some((field) => {
+    if ([title, description, price, category,status, productLocalFilePath].some((field) => {
         field && field?.trim() == ""
     })) {
         throw new ApiError(400, "All fields are required")
@@ -168,10 +171,13 @@ const getProductById = asyncHandler(async (req, res) => {
     if(!isValidObjectId(productId)){
         throw new ApiError(400, "Invalid product id");
     }
+    
+    
     const product = await Product.findById(productId);
     if(!product){
         throw new ApiError(400, "Product does not exist");
     }
+    
     res
     .status(200)
     .json(

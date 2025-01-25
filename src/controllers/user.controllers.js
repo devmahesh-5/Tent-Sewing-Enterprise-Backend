@@ -139,10 +139,11 @@ const getCurrentUser = asyncHandler(async (req, res) => {
     if (!user) {
         throw new ApiError(400, "User not loged in");
     }
+    const userWithoutPassword = await User.findById(user._id).select("-password");
     res
         .status(200)
         .json(
-            new Apiresponse(200, user, "User fetched in successfully")
+            new Apiresponse(200, userWithoutPassword, "User fetched in successfully")
         )
  })
 

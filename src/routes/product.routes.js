@@ -13,22 +13,22 @@ import { verifyJWT } from "../middlewares/auth.middlewares.js";
 import { upload } from "../middlewares/multer.middlewares.js";
 const router = Router();
 
-router.use(verifyJWT);
 
 router.route("/create")
 .post(
+    verifyJWT,
     upload.single("image"),
     createProduct
 );
 router.route("/all-products").get(getAllProducts);
-router.route("/:productId").
-    patch(
-        upload.single("image"),
-        updateProduct)
-    .delete(deleteProduct)
+router.route("/:productId")
+    .delete(verifyJWT,deleteProduct)
     .get(getProductById);
 // router.route("/delete/:productId").delete(deleteProduct);
 // router.route("/product/:productId").get(getProductById);
 router.route("/category/:category").get(getProductsByCategory);
-
+router.route('/update-product/:productId').patch(
+    verifyJWT,
+    upload.single("image"),
+    updateProduct)
 export default router;
