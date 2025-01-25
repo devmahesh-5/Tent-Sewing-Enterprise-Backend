@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: my-backend
+    env: node
+    buildCommand: npm install
+    startCommand: startCommand: node --experimental-json-modules src/index.js
+    plan: free
+    envVars:
+      - key: PORT
+        value: 3000
