@@ -1,14 +1,14 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
-const bookingSchema = new mongoose.Schema(
+const bookingSchema = new Schema(
     {
         user: {
-            type: mongoose.Schema.Types.ObjectId,
+            type: Schema.Types.ObjectId,
             ref: "User",
             required: true
         },
         product: {
-            type: mongoose.Schema.Types.ObjectId,
+            type: Schema.Types.ObjectId,
             ref: "Product",
             required: true
         },
@@ -20,11 +20,6 @@ const bookingSchema = new mongoose.Schema(
             type: Date,
             required: true
         },
-        status: {
-            type: String,
-            enum: ["pending", "confirmed", "cancelled"],
-            default: "pending"
-        },
         totalPrice: {
             type: Number,
             required: true
@@ -32,6 +27,11 @@ const bookingSchema = new mongoose.Schema(
         paymentProof: {
             type: String, // Cloudinary URL
             required: true
+        },
+        status: {
+            type: String,
+            enum: ["pending", "confirmed", "cancelled", "delivered", "returned"],
+            default: "pending"
         }
     },
     {

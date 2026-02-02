@@ -68,7 +68,7 @@ const updateBookingStatus = asyncHandler(async (req, res) => {
     const { id } = req.params;
     const { status } = req.body;
 
-    if (!["pending", "confirmed", "cancelled"].includes(status)) {
+    if (!["pending", "confirmed", "cancelled", "delivered", "returned"].includes(status)) {
         throw new ApiError(400, "Invalid status");
     }
 
